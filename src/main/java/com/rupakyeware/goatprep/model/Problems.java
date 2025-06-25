@@ -15,16 +15,18 @@ import java.util.List;
 public class Problems {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "problem_id")
     private int problemId;
 
+    @Column(name = "problem_name")
     private String problemName;
 
+    @Column(name = "problem_difficulty")
     private int problemDifficulty;
 
+    @Column(name = "problem_lookups")
     private int problemLookups;
 
+    @Column(name = "problem_url")
     private String problemUrl;
-
-    @OneToMany(mappedBy = "problem", cascade = CascadeType.ALL)
-    private List<CompanyProblems> companyProblems;
 }

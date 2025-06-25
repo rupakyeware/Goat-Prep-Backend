@@ -1,4 +1,4 @@
-package com.rupakyeware.goatprep.dto;
+package com.rupakyeware.goatprep.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

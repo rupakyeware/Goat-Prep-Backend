@@ -1,6 +1,6 @@
 package com.rupakyeware.goatprep.service;
 
-import com.rupakyeware.goatprep.dto.AuthRequest;
+import com.rupakyeware.goatprep.dto.auth.AuthRequest;
 import com.rupakyeware.goatprep.model.Users;
 import com.rupakyeware.goatprep.repo.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;

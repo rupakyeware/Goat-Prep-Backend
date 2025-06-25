@@ -1,7 +1,6 @@
 package com.rupakyeware.goatprep.controller.auth;
 
-import com.rupakyeware.goatprep.dto.AuthRequest;
-import com.rupakyeware.goatprep.filter.JWTFilter;
+import com.rupakyeware.goatprep.dto.auth.AuthRequest;
 import com.rupakyeware.goatprep.model.Users;
 import com.rupakyeware.goatprep.service.JWTService;
 import com.rupakyeware.goatprep.service.UserService;

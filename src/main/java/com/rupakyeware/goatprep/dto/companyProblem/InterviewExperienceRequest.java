@@ -1,6 +1,5 @@
-package com.rupakyeware.goatprep.dto;
+package com.rupakyeware.goatprep.dto.companyProblem;
 
-import com.rupakyeware.goatprep.model.Problems;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
