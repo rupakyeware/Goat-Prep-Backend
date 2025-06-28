@@ -29,7 +29,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid AuthRequest request) {
         request.setPassword(bCrypt.encode(request.getPassword()));
-        Users user = userService.registerUser(request);
+        userService.registerUser(request);
         return new ResponseEntity<>(userService.generateJWTToken(request), HttpStatus.CREATED); // placeholder
     }
 

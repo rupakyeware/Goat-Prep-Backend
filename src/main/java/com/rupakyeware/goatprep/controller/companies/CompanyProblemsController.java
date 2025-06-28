@@ -3,8 +3,6 @@ package com.rupakyeware.goatprep.controller.companies;
 import com.rupakyeware.goatprep.dto.company.CompanyDTO;
 import com.rupakyeware.goatprep.dto.companyProblem.InterviewExperienceRequest;
 import com.rupakyeware.goatprep.dto.problem.ProblemDTO;
-import com.rupakyeware.goatprep.model.Companies;
-import com.rupakyeware.goatprep.model.Problems;
 import com.rupakyeware.goatprep.service.CompaniesService;
 import com.rupakyeware.goatprep.service.ProblemsService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +11,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -28,6 +25,13 @@ public class CompanyProblemsController {
         this.problemsService = problemsService;
     }
 
+    @GetMapping
+    public ResponseEntity<List<CompanyDTO>> getCompaniesName(@RequestParam(required = true) String name, @RequestParam(required = false, defaultValue = "0") Integer page) {
+        List<CompanyDTO> companies = companiesService.getCompaniesByName(name, page);
+        if(companies.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else return new ResponseEntity<>(companies, HttpStatus.OK);
+    }
+
     @GetMapping(value = "/{companyId}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<CompanyDTO> getCompanyById(@PathVariable Integer companyId) {
         CompanyDTO company = companiesService.getCompanyById(companyId);
@@ -36,7 +40,7 @@ public class CompanyProblemsController {
 
     @GetMapping("/problems")
     public ResponseEntity<List<ProblemDTO>> getCompanyProblemsByCompanyId(
-            @RequestParam(required = true) Integer companyId,
+            @RequestParam() Integer companyId,
             @RequestParam(required = false) Integer difficulty,
             @RequestParam(required = false) Integer minLookups,
             @RequestParam(required = false, defaultValue = "problemLookups") String sortBy,
@@ -48,6 +52,7 @@ public class CompanyProblemsController {
 
     @PostMapping("/experience")
     public ResponseEntity<?> uploadCompanyProblem(@RequestBody InterviewExperienceRequest experienceRequest) {
-        return new ResponseEntity<>("Success", HttpStatus.CREATED); // placeholder
+        problemsService.postCompanyInterview(experienceRequest);
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 }

@@ -23,5 +23,6 @@ public class CompanyProblems {
     @JoinColumn(name = "company_id", nullable = false)
     private Companies company;
 
-    private int frequency;
+
+    private int problemLookups;
 }
