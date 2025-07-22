@@ -49,8 +49,7 @@ public class UserService {
     }
 
     public String generateJWTToken(AuthRequest request) {
-        Users user = new Users(request.getUsername(), request.getPassword());
-        return jwtService.generateToken(user);
+        return jwtService.generateToken(request.getUsername());
     }
 
     public List<ProblemDTO> getProblemsSolvedByUser(int userId) {
@@ -59,6 +58,7 @@ public class UserService {
 
     @Transactional
     public void markSolved(int userId, int problemId) {
+        System.out.println("userId: " + userId);
         Users user = userRepo.findById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "User could not be found"));
         Problems problem = problemsRepo.findById(problemId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Problem could not be found"));
 

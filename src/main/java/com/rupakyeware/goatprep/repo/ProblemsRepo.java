@@ -27,5 +27,5 @@ public interface ProblemsRepo extends JpaRepository<Problems, Integer> {
     @Query(
             "SELECT p FROM Problems p WHERE LOWER(p.problemName) LIKE LOWER(CONCAT('%',:name,'%'))"
     )
-    List<Problems> findProblemsByProblemNameIgnoreCase(String name);
+    List<Problems> findProblemsByProblemNameIgnoreCase(String name, Pageable pageable);
 }

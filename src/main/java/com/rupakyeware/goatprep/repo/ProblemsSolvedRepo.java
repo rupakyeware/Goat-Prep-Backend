@@ -19,5 +19,5 @@ public interface ProblemsSolvedRepo extends JpaRepository<ProblemsSolved, Intege
     @Query("SELECT NEW com.rupakyeware.goatprep.dto.problem.ProblemDTO(ps.problem.problemId, ps.problem.problemName, ps.problem.problemDifficulty, ps.problem.problemLookups, ps.problem.problemUrl) " +
             " from ProblemsSolved ps " +
             " WHERE ps.user.userId = :userId")
-    List<ProblemDTO> findProblemsSolvedByUser(@Param("userId") int userId);
+    List<ProblemDTO> findProblemsSolvedByUser(@Param("userId") Integer userId);
 }

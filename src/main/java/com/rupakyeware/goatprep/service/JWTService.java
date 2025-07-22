@@ -1,12 +1,16 @@
 package com.rupakyeware.goatprep.service;
 
+import com.rupakyeware.goatprep.exception.InvalidJWTException;
 import com.rupakyeware.goatprep.model.Users;
+import com.rupakyeware.goatprep.repo.UserRepo;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -20,9 +24,10 @@ import java.util.function.Function;
 
 @Service
 public class JWTService {
+    private final UserRepo userRepo;
     private String secretKey;
 
-    public JWTService() {
+    public JWTService(UserRepo userRepo) {
         try {
             KeyGenerator keyGen = KeyGenerator.getInstance("HmacSHA256");
             SecretKey key = keyGen.generateKey();
@@ -30,10 +35,14 @@ public class JWTService {
         } catch (NoSuchAlgorithmException e) {
             throw new RuntimeException(e);
         }
+        this.userRepo = userRepo;
     }
 
-    public String generateToken(Users user) {
+    public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
+        Users user = userRepo.findByUsername(username);
+        System.out.println("Making jwt token for userId: " + user.getUserId());
+        claims.put("userId", user.getUserId());
 
         return Jwts.builder()
                 .claims()
@@ -56,17 +65,29 @@ public class JWTService {
         return extractClaim(token, Claims::getSubject);
     }
 
+    public Integer extractUserId(String token) {
+        return extractClaim(token, claims -> {
+            Object userIdObject = claims.get("userId");
+            if(userIdObject instanceof Integer) return (Integer) userIdObject;
+            else throw new IllegalStateException("userId is missing or not a valid number in JWT claims");
+        });
+    }
+
     private <T> T extractClaim(String token, Function<Claims, T> claimResolver) {
         final Claims claims = extractAllClaims(token);
         return claimResolver.apply(claims);
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parser()
-                .verifyWith(getKey())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload();
+        try {
+            return Jwts.parser()
+                    .verifyWith(getKey())
+                    .build()
+                    .parseSignedClaims(token)
+                    .getPayload();
+        } catch(Exception e) {
+            throw new InvalidJWTException("Invalid or expired token");
+        }
     }
 
     public boolean validateToken(String token, UserDetails userDetails) {

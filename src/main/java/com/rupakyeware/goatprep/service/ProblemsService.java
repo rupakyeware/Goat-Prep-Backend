@@ -55,7 +55,8 @@ public class ProblemsService {
     }
 
     public List<ProblemDTO> getProblemsByName(String name) {
-        List<Problems> problems = problemsRepo.findProblemsByProblemNameIgnoreCase(name);
+        PageRequest pageRequest = PageRequest.of(0, 5);
+        List<Problems> problems = problemsRepo.findProblemsByProblemNameIgnoreCase(name, pageRequest);
         return convertToDTO(problems);
     }
 
