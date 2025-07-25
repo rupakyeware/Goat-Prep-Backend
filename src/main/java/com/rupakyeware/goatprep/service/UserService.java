@@ -19,6 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserService {
@@ -46,6 +47,26 @@ public class UserService {
     public Boolean verifyUser(AuthRequest request) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword()));
         return (authentication.isAuthenticated());
+    }
+
+    public String handleUserOAuth(String username) {
+        Optional<Users> optionalUser = userRepo.findByUsername(username); // check if user exists
+
+        // if user doesn't exist, create
+        if(optionalUser.isEmpty()) {
+            AuthRequest request = new AuthRequest();
+            request.setUsername(username);
+            request.setPassword(UUID.randomUUID().toString());
+            registerUser(request);
+        }
+
+        // generate jwt for user
+        AuthRequest authRequest = new AuthRequest();
+        authRequest.setUsername(username);
+        authRequest.setPassword("");
+        String jwt = generateJWTToken(authRequest);
+
+        return jwt;
     }
 
     public String generateJWTToken(AuthRequest request) {
