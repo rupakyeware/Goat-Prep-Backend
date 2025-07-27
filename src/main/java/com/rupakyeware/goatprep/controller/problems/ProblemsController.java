@@ -26,7 +26,7 @@ public class ProblemsController {
             @RequestParam(required = false, defaultValue = "desc") String order,
             @RequestParam(required = false, defaultValue = "0") Integer page) {
 
-        return new ResponseEntity<>(problemsService.getFilteredProblems((Integer) difficulty, (Integer) minLookups, (String) sortBy, (String) order, page), HttpStatus.OK); // placeholder
+        return new ResponseEntity<>(problemsService.getFilteredProblems(difficulty, minLookups, sortBy, order, page), HttpStatus.OK);
     }
 
     @GetMapping("/search")

@@ -27,7 +27,14 @@ public class CompanyProblemsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<CompanyDTO>> getCompaniesName(@RequestParam(required = true) String name, @RequestParam(required = false, defaultValue = "0") Integer page) {
+    public ResponseEntity<List<CompanyDTO>> getCompanies(@RequestParam(required = false, defaultValue = "0") Integer page) {
+        List<CompanyDTO> companies = companiesService.getCompanies(page);
+        if(companies.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        else return new ResponseEntity<>(companies, HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CompanyDTO>> getCompaniesByName(@RequestParam(required = true) String name, @RequestParam(required = false, defaultValue = "0") Integer page) {
         List<CompanyDTO> companies = companiesService.getCompaniesByName(name, page);
         if(companies.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else return new ResponseEntity<>(companies, HttpStatus.OK);

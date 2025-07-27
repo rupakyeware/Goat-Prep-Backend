@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 @CrossOrigin
 @RestController
@@ -30,8 +31,16 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<String> register(@RequestBody @Valid AuthRequest request) {
         request.setPassword(bCrypt.encode(request.getPassword()));
-        userService.registerUser(request);
-        return new ResponseEntity<>(userService.generateJWTToken(request), HttpStatus.CREATED); // placeholder
+        try {
+            userService.registerUser(request);
+            return new ResponseEntity<>(userService.generateJWTToken(request), HttpStatus.CREATED);
+        }
+        catch (ResponseStatusException e){
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.CONFLICT);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
     }
 
     @PostMapping("/login")

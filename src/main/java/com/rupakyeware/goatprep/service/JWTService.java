@@ -8,6 +8,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.KeyGenerator;
@@ -35,6 +36,9 @@ public class JWTService {
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         Optional<Users> user = userRepo.findByUsername(username);
+
+        if(user.isEmpty()) throw new UsernameNotFoundException("User could not be found");
+
         System.out.println("Making jwt token for userId: " + user.get().getUserId());
         claims.put("userId", user.get().getUserId());
 

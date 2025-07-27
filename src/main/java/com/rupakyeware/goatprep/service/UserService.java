@@ -38,10 +38,14 @@ public class UserService {
         this.problemsRepo = problemsRepo;
     }
 
-    public Users registerUser(AuthRequest request) {
+    public void registerUser(AuthRequest request) {
+        Optional<Users> optionalUser = userRepo.findByUsername(request.getUsername());
+
+        if(optionalUser.isPresent())
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is taken");
+
         Users user = new Users(request.getUsername(), request.getPassword());
         userRepo.save(user);
-        return user;
     }
 
     public Boolean verifyUser(AuthRequest request) {
