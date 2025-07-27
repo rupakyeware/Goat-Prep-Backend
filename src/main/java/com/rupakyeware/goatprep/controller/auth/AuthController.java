@@ -43,9 +43,14 @@ public class AuthController {
 
     }
 
+    @GetMapping("/verify")
+    public ResponseEntity<?> verifyUser() {
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
     @PostMapping("/login")
     public ResponseEntity<String> login(@RequestBody @Valid AuthRequest request) {
-        if(userService.verifyUser(request)) return new ResponseEntity<>(userService.generateJWTToken(request), HttpStatus.OK); // placeholder
+        if(userService.verifyUser(request)) return new ResponseEntity<>(userService.generateJWTToken(request), HttpStatus.OK);
         else return new ResponseEntity<> ("Incorrect credentials", HttpStatus.UNAUTHORIZED);
     }
 }

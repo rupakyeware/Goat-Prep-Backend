@@ -39,7 +39,6 @@ public class JWTService {
 
         if(user.isEmpty()) throw new UsernameNotFoundException("User could not be found");
 
-        System.out.println("Making jwt token for userId: " + user.get().getUserId());
         claims.put("userId", user.get().getUserId());
 
         return Jwts.builder()

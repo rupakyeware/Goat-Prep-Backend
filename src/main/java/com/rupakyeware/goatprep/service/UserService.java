@@ -83,7 +83,6 @@ public class UserService {
 
     @Transactional
     public void markSolved(int userId, int problemId) {
-        System.out.println("userId: " + userId);
         Users user = userRepo.findById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "User could not be found"));
         Problems problem = problemsRepo.findById(problemId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Problem could not be found"));
 

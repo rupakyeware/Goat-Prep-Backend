@@ -16,12 +16,12 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("api/company")
-public class CompanyProblemsController {
+public class CompanyController {
     private final ProblemsService problemsService;
     CompaniesService companiesService;
 
     @Autowired
-    public CompanyProblemsController(CompaniesService companiesService, ProblemsService problemsService) {
+    public CompanyController(CompaniesService companiesService, ProblemsService problemsService) {
         this.companiesService = companiesService;
         this.problemsService = problemsService;
     }
