@@ -38,10 +38,14 @@ public class UserService {
         this.problemsRepo = problemsRepo;
     }
 
-    public Users registerUser(AuthRequest request) {
+    public void registerUser(AuthRequest request) {
+        Optional<Users> optionalUser = userRepo.findByUsername(request.getUsername());
+
+        if(optionalUser.isPresent())
+            throw new ResponseStatusException(HttpStatus.CONFLICT, "Username is taken");
+
         Users user = new Users(request.getUsername(), request.getPassword());
         userRepo.save(user);
-        return user;
     }
 
     public Boolean verifyUser(AuthRequest request) {
@@ -64,9 +68,8 @@ public class UserService {
         AuthRequest authRequest = new AuthRequest();
         authRequest.setUsername(username);
         authRequest.setPassword("");
-        String jwt = generateJWTToken(authRequest);
 
-        return jwt;
+        return generateJWTToken(authRequest);
     }
 
     public String generateJWTToken(AuthRequest request) {
@@ -79,7 +82,6 @@ public class UserService {
 
     @Transactional
     public void markSolved(int userId, int problemId) {
-        System.out.println("userId: " + userId);
         Users user = userRepo.findById(userId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "User could not be found"));
         Problems problem = problemsRepo.findById(problemId).orElseThrow(()-> new ResponseStatusException(HttpStatus.NOT_FOUND, "Problem could not be found"));
 

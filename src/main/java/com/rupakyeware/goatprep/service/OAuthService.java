@@ -40,7 +40,7 @@ public class OAuthService {
 
         MultiValueMap<String, String> params = new LinkedMultiValueMap<>();
         params.add("code", code);
-        params.add("redirect_uri", "http://localhost:8080/oauth/grantcode");
+        params.add("redirect_uri", redirectUri);
         params.add("client_id", clientId);
         params.add("client_secret", clientSecret);
         params.add("scope", "https%3A%2F%2Fwww.googleapis.com%2Fauth%2Fuserinfo.profile");

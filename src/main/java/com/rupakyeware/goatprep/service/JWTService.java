@@ -35,7 +35,6 @@ public class JWTService {
     public String generateToken(String username) {
         Map<String, Object> claims = new HashMap<>();
         Optional<Users> user = userRepo.findByUsername(username);
-        System.out.println("Making jwt token for userId: " + user.get().getUserId());
         claims.put("userId", user.get().getUserId());
 
         return Jwts.builder()

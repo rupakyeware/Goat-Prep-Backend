@@ -16,18 +16,23 @@ import java.util.List;
 @CrossOrigin
 @RestController
 @RequestMapping("api/company")
-public class CompanyProblemsController {
+public class CompanyController {
     private final ProblemsService problemsService;
     CompaniesService companiesService;
 
     @Autowired
-    public CompanyProblemsController(CompaniesService companiesService, ProblemsService problemsService) {
+    public CompanyController(CompaniesService companiesService, ProblemsService problemsService) {
         this.companiesService = companiesService;
         this.problemsService = problemsService;
     }
 
     @GetMapping
-    public ResponseEntity<List<CompanyDTO>> getCompaniesName(@RequestParam(required = true) String name, @RequestParam(required = false, defaultValue = "0") Integer page) {
+    public ResponseEntity<List<CompanyDTO>> getCompanies(@RequestParam(required = false, defaultValue = "0") Integer page) {
+        return new ResponseEntity<>(companiesService.getCompanies(page), HttpStatus.OK);
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<CompanyDTO>> getCompaniesByName(@RequestParam() String name, @RequestParam(required = false, defaultValue = "0") Integer page) {
         List<CompanyDTO> companies = companiesService.getCompaniesByName(name, page);
         if(companies.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         else return new ResponseEntity<>(companies, HttpStatus.OK);

@@ -1,6 +1,5 @@
 package com.rupakyeware.goatprep.service;
 
-import com.rupakyeware.goatprep.dto.company.CompanyDTO;
 import com.rupakyeware.goatprep.dto.companyProblem.InterviewExperienceRequest;
 import com.rupakyeware.goatprep.dto.problem.ProblemDTO;
 import com.rupakyeware.goatprep.model.Companies;
@@ -26,7 +25,7 @@ import java.util.stream.Collectors;
 public class ProblemsService {
     private final CompanyProblemsRepo companyProblemsRepo;
     private final CompaniesRepo companiesRepo;
-    private ProblemsRepo problemsRepo;
+    private final ProblemsRepo problemsRepo;
 
     @Autowired
     public ProblemsService(ProblemsRepo problemsRepo, CompanyProblemsRepo companyProblemsRepo, CompaniesRepo companiesRepo) {
